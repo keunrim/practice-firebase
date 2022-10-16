@@ -3,14 +3,20 @@ import React, { useState } from "react";
 const Auth = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
   const onChange = (event) => {
-    //이 방식으로하면 동일한 두개의 fn을 만들지 않아도 된다.
-    console.log(event.target.name);
-    if (event.target.name === "email") {
-      setEmail(event.target.value);
-    } else {
-      setPassword(event.target.value);
+    //이렇게 onChang 이벤트를 정의하면 동일한 두개의 fn을 만들지 않아도 된다.
+    const {
+      target: { name, value },
+    } = event;
+    // 구조 분해 할당으로 선언
+
+    if (name === "email") {
+      setEmail(value);
+    } else if (name === "password") {
+      setPassword(value);
     }
+    console.log(name, value);
   };
   const onSubmit = (event) => {
     event.preventDefault();
