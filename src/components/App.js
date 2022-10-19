@@ -26,7 +26,7 @@ function App() {
       ) : (
         "Initializing..."
       )}
-      <footer>basic firebae &copy; {new Date().getFullYear()}</footer>
+      {/* <footer>basic firebae &copy; {new Date().getFullYear()}</footer> */}
     </>
   );
 }
