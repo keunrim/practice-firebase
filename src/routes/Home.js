@@ -1,11 +1,13 @@
-import { dbService } from "fbase";
-import React, { useEffect, useState } from "react";
+import { dbService, storageService } from "fbase";
+import React, { useEffect, useRef, useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 import Nweet from "components/Nweet";
 
 const Home = ({ userObj }) => {
   const [nweet, setNweet] = useState("");
   const [nweets, setNweets] = useState([]);
   const [attachment, setAttachment] = useState();
+  const fileInput = useRef();
 
   useEffect(() => {
     dbService
@@ -29,12 +31,20 @@ const Home = ({ userObj }) => {
 
   const onSubmit = async (event) => {
     event.preventDefault();
-    await dbService.collection("nweets").add({
+    const attachmentRef = storageService
+      .ref()
+      .child(`${userObj.uid}/${uuidv4()}`); //레퍼런스를 생성한다.(경로지정)
+    const response = await attachmentRef.putString(attachment, "data_url"); //파일을 업로드한다
+    const attachmentUrl = await response.ref.getDownloadURL(); //다운로드 경로를 반환받는다.
+    const nweetObj = {
       text: nweet,
       createdAt: Date.now(),
       creatorID: userObj.uid,
-    });
+      attachmentUrl,
+    };
+    await dbService.collection("nweets").add(nweetObj);
     setNweet("");
+    setAttachment("");
   };
 
   const onFileChange = (event) => {
@@ -55,7 +65,8 @@ const Home = ({ userObj }) => {
   };
 
   const onClearAttachment = () => {
-    setAttachment(null);
+    setAttachment("");
+    fileInput.current.value = "";
   };
 
   return (
@@ -68,7 +79,12 @@ const Home = ({ userObj }) => {
           placeholder="What's on your mind?"
           maxLength={120}
         />
-        <input type="file" accept="image/*" onChange={onFileChange} />
+        <input
+          type="file"
+          accept="image/*"
+          onChange={onFileChange}
+          ref={fileInput}
+        />
         <input type="submit" value="Nweet" />
         {attachment && (
           <div>
