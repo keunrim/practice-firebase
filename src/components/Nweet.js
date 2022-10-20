@@ -9,7 +9,9 @@ const Nweet = ({ nweetObj, isOwner }) => {
     const ok = window.confirm("정말로 삭제할까요?");
     if (ok) {
       await dbService.doc(`nweets/${nweetObj.id}`).delete();
-      await storageService.refFromURL(nweetObj.attachmentUrl).delete();
+      if (nweetObj.attachmentUrl !== "") {
+        await storageService.refFromURL(nweetObj.attachmentUrl).delete();
+      }
     }
   };
 
@@ -32,7 +34,6 @@ const Nweet = ({ nweetObj, isOwner }) => {
   const onSubmit = async (event) => {
     event.preventDefault();
     await dbService.doc(`nweets/${nweetObj.id}`).update({ text: newNweet });
-    // toggleEditing();
     setEditing(false);
   };
 

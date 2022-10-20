@@ -57,7 +57,6 @@ const Home = ({ userObj }) => {
       target: { files },
     } = event;
     const theFile = files[0];
-    console.log(theFile);
     // 파일리더를 생성하고 해당 정보를 제공한다.
     const reader = new FileReader();
     reader.onloadend = (finishedEvent) => {
