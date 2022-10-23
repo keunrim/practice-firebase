@@ -1,11 +1,29 @@
-import React, { useState } from "react";
-import { v4 as uuidv4 } from "uuid";
-import { authService } from "firebase-config";
+import React, { useEffect, useState } from "react";
 import { dbService } from "firebase-config";
-import { doc, setDoc } from "firebase/firestore";
+import {
+  addDoc,
+  onSnapshot,
+  collection,
+  query,
+  orderBy,
+  limit,
+} from "firebase/firestore";
 
 const Home = ({ isLoggedIn, userObj }) => {
   const [comment, setComment] = useState("");
+  const [comments, setComments] = useState([]);
+
+  useEffect(() => {
+    const collectionRef = collection(dbService, "comments");
+    const q = query(collectionRef, orderBy("createdTime", "desc"), limit(3));
+    onSnapshot(q, (snapShot) => {
+      const commentsArray = snapShot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setComments(commentsArray);
+    });
+  }, []);
 
   const onChange = (event) => {
     const {
@@ -18,26 +36,43 @@ const Home = ({ isLoggedIn, userObj }) => {
     event.preventDefault();
     const newDoc = {
       text: comment,
-      createdAt: Date.now(),
+      createdTime: Date.now(),
       creator: userObj.uid,
     };
-    await setDoc(doc(dbService, "comments"), newDoc);
+    try {
+      const docRef = await addDoc(collection(dbService, "comments"), newDoc);
+      console.log(docRef.path);
+      setComment("");
+    } catch (e) {
+      console.error("Error adding document: ", e);
+    }
   };
 
   return (
     <>
       <div>
-        <form onSubmit={onSubmit}>
-          <input
-            name="comment"
-            type="text"
-            value={comment}
-            placeholder="입력하세요"
-            maxLength={120}
-            onChange={onChange}
-          />
-          <input name="submit" type="submit" value="전달하기" />
-        </form>
+        {isLoggedIn && (
+          <>
+            <h4>새소식 발행</h4>
+            <form onSubmit={onSubmit}>
+              <input
+                name="comment"
+                type="text"
+                value={comment}
+                placeholder="입력하세요"
+                maxLength={120}
+                onChange={onChange}
+              />
+              <input name="submit" type="submit" value="발행하기" />
+            </form>
+          </>
+        )}
+      </div>
+      <h4>최신 글</h4>
+      <div>
+        {comments.map((comment) => {
+          return <div key={comment.id}>{comment.text}</div>;
+        })}
       </div>
     </>
   );
