@@ -18,9 +18,18 @@ const AppRouter = ({ isLoggedIn, userObj }) => {
           path="/"
           element={<Home isLoggedIn={isLoggedIn} userObj={userObj} />}
         ></Route>
-        <Route path="/profile" element={<Profile />}></Route>
-        <Route path="/signin" element={<SignInForm />}></Route>
-        <Route path="/signup" element={<SignUpForm />}></Route>
+        <Route
+          path="/profile"
+          element={<Profile isLoggedIn={isLoggedIn} userObj={userObj} />}
+        ></Route>
+        <Route
+          path="/signin"
+          element={<SignInForm isLoggedIn={isLoggedIn} />}
+        ></Route>
+        <Route
+          path="/signup"
+          element={<SignUpForm isLoggedIn={isLoggedIn} />}
+        ></Route>
       </Routes>
     </BrowserRouter>
   );

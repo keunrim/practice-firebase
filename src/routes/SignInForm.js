@@ -7,6 +7,8 @@ import {
   signInWithPopup,
 } from "firebase/auth";
 import { Link, useNavigate } from "react-router-dom";
+import { MdLogin } from "react-icons/md";
+import { AiFillGoogleCircle, AiFillGithub } from "react-icons/ai";
 
 const SignInForm = () => {
   const [loginEmail, setLoginEmail] = useState("");
@@ -36,6 +38,7 @@ const SignInForm = () => {
   };
 
   const onSocialAuthClick = async (event) => {
+    console.log("authClick");
     const {
       target: { name },
     } = event;
@@ -80,16 +83,18 @@ const SignInForm = () => {
             />
           </div>
           <div>
-            <input name="submit" type="submit" value="Sign in" />
+            <button type="submit">
+              <MdLogin />
+            </button>
           </div>
         </form>
         <div>소셜 로그인</div>
         <div>
-          <button name="google" onClick={onSocialAuthClick}>
-            with Google Account
+          <button type="button" name="google" onClick={onSocialAuthClick}>
+            왜?
           </button>
-          <button name="github" onClick={onSocialAuthClick}>
-            with Github Account
+          <button type="button" name="github" onClick={onSocialAuthClick}>
+            <AiFillGithub />
           </button>
         </div>
         <Link to="/signup">신규 가입</Link>

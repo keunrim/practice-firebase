@@ -21,9 +21,11 @@ const App = () => {
           uid: user.uid,
           email: user.email,
         });
+        console.log("SignIn");
       } else {
         setIsLoggedIn(false);
         setUserObj(null);
+        console.log("SignOut");
       }
     });
     setIsLoading(false);

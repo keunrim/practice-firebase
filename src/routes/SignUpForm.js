@@ -56,7 +56,7 @@ const SignUpForm = () => {
           />
         </div>
         <div>
-          <input name="submit" type="submit" value="Create Account" />
+          <button type="submit"></button>
         </div>
       </form>
       <Link to="/signin">로그인 화면으로 돌아가기</Link>

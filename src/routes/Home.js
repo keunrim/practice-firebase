@@ -8,6 +8,8 @@ import {
   orderBy,
   limit,
 } from "firebase/firestore";
+import { MdCreate } from "react-icons/md";
+import Comment from "components/Comment";
 
 const Home = ({ isLoggedIn, userObj }) => {
   const [comment, setComment] = useState("");
@@ -15,7 +17,7 @@ const Home = ({ isLoggedIn, userObj }) => {
 
   useEffect(() => {
     const collectionRef = collection(dbService, "comments");
-    const q = query(collectionRef, orderBy("createdTime", "desc"), limit(3));
+    const q = query(collectionRef, orderBy("createdTime", "desc"), limit(5));
     onSnapshot(q, (snapShot) => {
       const commentsArray = snapShot.docs.map((doc) => ({
         id: doc.id,
@@ -63,16 +65,23 @@ const Home = ({ isLoggedIn, userObj }) => {
                 maxLength={120}
                 onChange={onChange}
               />
-              <input name="submit" type="submit" value="발행하기" />
+              <button type="submit">
+                <MdCreate />
+              </button>
             </form>
           </>
         )}
       </div>
       <h4>최신 글</h4>
       <div>
-        {comments.map((comment) => {
-          return <div key={comment.id}>{comment.text}</div>;
-        })}
+        {comments.map((commentObj) => (
+          <Comment
+            key={commentObj.id}
+            commentObj={commentObj}
+            isLoggedIn={isLoggedIn}
+            userObj={userObj}
+          />
+        ))}
       </div>
     </>
   );
