@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { dbService } from "firebase-config";
+import React, { useEffect, useState, useRef } from "react";
+import { dbService, storageService } from "firebase-config";
 import {
   addDoc,
   onSnapshot,
@@ -16,6 +16,7 @@ const Home = ({ isLoggedIn, userObj }) => {
   const [comment, setComment] = useState("");
   const [comments, setComments] = useState([]);
   const [attachment, setAttachment] = useState("");
+  const attachInput = useRef(null);
 
   useEffect(() => {
     const collectionRef = collection(dbService, "comments");
@@ -53,6 +54,7 @@ const Home = ({ isLoggedIn, userObj }) => {
 
   const clearAttachment = () => {
     setAttachment("");
+    attachInput.current.value = "";
   };
   const onSubmit = async (event) => {
     event.preventDefault();
@@ -86,10 +88,11 @@ const Home = ({ isLoggedIn, userObj }) => {
                 onChange={onChange}
               />
               <input
-                name="attachPhoto"
+                name="attachImage"
                 type="file"
                 accept="image/*"
                 onChange={onFileChange}
+                ref={attachInput}
               />
               <button type="submit">
                 <MdCreate />
