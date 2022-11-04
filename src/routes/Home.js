@@ -8,12 +8,14 @@ import {
   orderBy,
   limit,
 } from "firebase/firestore";
-import { MdCreate } from "react-icons/md";
+import { ref } from "firebase/storage";
+import { MdCreate, MdCancel } from "react-icons/md";
 import Comment from "components/Comment";
 
 const Home = ({ isLoggedIn, userObj }) => {
   const [comment, setComment] = useState("");
   const [comments, setComments] = useState([]);
+  const [attachment, setAttachment] = useState("");
 
   useEffect(() => {
     const collectionRef = collection(dbService, "comments");
@@ -34,6 +36,24 @@ const Home = ({ isLoggedIn, userObj }) => {
     setComment(value);
   };
 
+  const onFileChange = (event) => {
+    const {
+      target: { files },
+    } = event;
+    const theFile = files[0];
+    const reader = new FileReader();
+    reader.onloadend = (finishedEvent) => {
+      const {
+        target: { result },
+      } = finishedEvent;
+      setAttachment(result);
+    };
+    reader.readAsDataURL(theFile);
+  };
+
+  const clearAttachment = () => {
+    setAttachment("");
+  };
   const onSubmit = async (event) => {
     event.preventDefault();
     const newDoc = {
@@ -65,9 +85,28 @@ const Home = ({ isLoggedIn, userObj }) => {
                 maxLength={120}
                 onChange={onChange}
               />
+              <input
+                name="attachPhoto"
+                type="file"
+                accept="image/*"
+                onChange={onFileChange}
+              />
               <button type="submit">
                 <MdCreate />
               </button>
+              {attachment && (
+                <div>
+                  <img
+                    src={attachment}
+                    alt="upload"
+                    width="50px"
+                    height="50px"
+                  />
+                  <button name="cancel" onClick={clearAttachment}>
+                    <MdCancel />
+                  </button>
+                </div>
+              )}
             </form>
           </>
         )}

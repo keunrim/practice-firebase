@@ -38,9 +38,9 @@ const SignInForm = () => {
   };
 
   const onSocialAuthClick = async (event) => {
-    console.log("authClick");
+    console.log(event);
     const {
-      target: { name },
+      currentTarget: { name },
     } = event;
     let provider;
     if (name === "google") {
@@ -91,7 +91,7 @@ const SignInForm = () => {
         <div>소셜 로그인</div>
         <div>
           <button type="button" name="google" onClick={onSocialAuthClick}>
-            왜?
+            <AiFillGoogleCircle />
           </button>
           <button type="button" name="github" onClick={onSocialAuthClick}>
             <AiFillGithub />
