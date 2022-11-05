@@ -8,7 +8,8 @@ import {
   orderBy,
   limit,
 } from "firebase/firestore";
-import { ref } from "firebase/storage";
+import { getDownloadURL, ref, uploadString } from "firebase/storage";
+import { v4 as uuidv4 } from "uuid";
 import { MdCreate, MdCancel } from "react-icons/md";
 import Comment from "components/Comment";
 
@@ -56,20 +57,34 @@ const Home = ({ isLoggedIn, userObj }) => {
     setAttachment("");
     attachInput.current.value = "";
   };
+
   const onSubmit = async (event) => {
     event.preventDefault();
+
+    let attachmentURL = "";
+
+    if (attachment !== "") {
+      const attachmentRef = ref(storageService, `${userObj.uid}/${uuidv4()}`);
+      const response = await uploadString(
+        attachmentRef,
+        attachment,
+        "data_url"
+      );
+      attachmentURL = await getDownloadURL(response.ref);
+    }
+
     const newDoc = {
-      text: comment,
+      comment,
       createdTime: Date.now(),
       creator: userObj.uid,
+      attachmentURL,
     };
-    try {
-      const docRef = await addDoc(collection(dbService, "comments"), newDoc);
-      console.log(docRef.path);
-      setComment("");
-    } catch (e) {
-      console.error("Error adding document: ", e);
-    }
+
+    await addDoc(collection(dbService, "comments"), newDoc).catch((reason) => {
+      console.log(reason);
+    });
+    setComment("");
+    clearAttachment();
   };
 
   return (

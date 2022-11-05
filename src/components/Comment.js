@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { dbService } from "firebase-config";
+import { dbService, storageService } from "firebase-config";
 import { deleteDoc, doc, updateDoc } from "firebase/firestore";
+import { ref, deleteObject } from "firebase/storage";
 import { MdDelete, MdEditNote, MdCreate, MdCancel } from "react-icons/md";
 
 const Comment = ({ commentObj, isLoggedIn, userObj }) => {
@@ -14,8 +15,8 @@ const Comment = ({ commentObj, isLoggedIn, userObj }) => {
     setUpdateComment(value);
   };
 
-  const onEditing = (event) => {
-    setUpdateComment(commentObj.text);
+  const onEditing = () => {
+    setUpdateComment(commentObj.comment);
     setEditing(true);
   };
 
@@ -23,7 +24,7 @@ const Comment = ({ commentObj, isLoggedIn, userObj }) => {
     event.preventDefault();
     try {
       await updateDoc(doc(dbService, "comments", commentObj.id), {
-        text: updateComment,
+        comment: updateComment,
       });
       setEditing(false);
       setUpdateComment("");
@@ -38,10 +39,10 @@ const Comment = ({ commentObj, isLoggedIn, userObj }) => {
   };
 
   const onDelete = async (event) => {
-    try {
-      await deleteDoc(doc(dbService, "comments", commentObj.id));
-    } catch (error) {
-      console.error("Error deletting document: ", error);
+    await deleteDoc(doc(dbService, "comments", commentObj.id));
+    if (commentObj.attachmentURL !== "") {
+      const attachmentURL = ref(storageService, commentObj.attachmentURL);
+      await deleteObject(attachmentURL);
     }
   };
 
@@ -69,18 +70,28 @@ const Comment = ({ commentObj, isLoggedIn, userObj }) => {
           </>
         ) : (
           <>
-            {commentObj.text}
+            {commentObj.attachmentURL && (
+              <div>
+                <img
+                  src={commentObj.attachmentURL}
+                  width="50px"
+                  height="50px"
+                  alt="글이미지"
+                />
+              </div>
+            )}
+            <div>{commentObj.comment}</div>
             {isLoggedIn && (
               <>
                 {commentObj.creator === userObj.uid && (
-                  <>
+                  <div>
                     <button type="button" onClick={onEditing}>
                       <MdEditNote />
                     </button>
                     <button type="button" onClick={onDelete}>
                       <MdDelete />
                     </button>
-                  </>
+                  </div>
                 )}
               </>
             )}
