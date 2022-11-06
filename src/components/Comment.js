@@ -74,8 +74,8 @@ const Comment = ({ commentObj, isLoggedIn, userObj }) => {
               <div>
                 <img
                   src={commentObj.attachmentURL}
-                  width="50px"
-                  height="50px"
+                  width="180px"
+                  height="135px"
                   alt="글이미지"
                 />
               </div>

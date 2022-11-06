@@ -117,8 +117,8 @@ const Home = ({ isLoggedIn, userObj }) => {
                   <img
                     src={attachment}
                     alt="upload"
-                    width="50px"
-                    height="50px"
+                    width="180px"
+                    height="135px"
                   />
                   <button name="cancel" onClick={clearAttachment}>
                     <MdCancel />

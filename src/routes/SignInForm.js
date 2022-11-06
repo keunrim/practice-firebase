@@ -38,7 +38,6 @@ const SignInForm = () => {
   };
 
   const onSocialAuthClick = async (event) => {
-    console.log(event);
     const {
       currentTarget: { name },
     } = event;
