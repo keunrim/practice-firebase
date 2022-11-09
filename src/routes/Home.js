@@ -12,6 +12,7 @@ import { getDownloadURL, ref, uploadString } from "firebase/storage";
 import { v4 as uuidv4 } from "uuid";
 import { MdCreate, MdCancel } from "react-icons/md";
 import Comment from "components/Comment";
+import Editor from "components/Editor";
 
 const Home = ({ isLoggedIn, userObj }) => {
   const [comment, setComment] = useState("");
@@ -112,6 +113,7 @@ const Home = ({ isLoggedIn, userObj }) => {
               <button type="submit">
                 <MdCreate />
               </button>
+              <Editor />
               {attachment && (
                 <div>
                   <img
