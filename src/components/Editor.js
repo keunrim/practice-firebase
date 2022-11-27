@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 
@@ -14,6 +14,7 @@ const Editor = () => {
         { indent: "+1" },
       ],
       ["link", "image"],
+      [{ align: [] }, { color: [] }, { background: [] }],
       ["clean"],
     ],
   };
@@ -30,19 +31,18 @@ const Editor = () => {
     "indent",
     "link",
     "image",
+    "align",
+    "color",
+    "background",
   ];
 
   const [value, setValue] = useState("");
   const quillRef = useRef(null);
 
-  const onClickTest = (event) => {
-    const reactQuill = quillRef.current;
-    console.log(reactQuill.unprivilegedEditor.getContents());
-  };
-
   return (
     <>
       <ReactQuill
+        style={{ width: "650px" }}
         theme="snow"
         modules={modules}
         formats={formats}
@@ -50,9 +50,6 @@ const Editor = () => {
         onChange={setValue}
         ref={quillRef}
       />
-      <button type="button" onClick={onClickTest}>
-        함볼까?
-      </button>
     </>
   );
 };
