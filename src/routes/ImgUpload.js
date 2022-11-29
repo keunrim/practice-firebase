@@ -32,8 +32,6 @@ const ImgUpload = ({ userObj }) => {
     } = event;
     const theFile = files[0];
     setFile(theFile);
-
-    console.log(userObj.uid);
   };
 
   return (
