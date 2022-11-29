@@ -7,6 +7,8 @@ import SignInForm from "routes/SignInForm";
 import Logo from "components/logo";
 import Navigation from "components/Navigation";
 import Profile from "routes/Profile";
+import ImgUpload from "routes/ImgUpload";
+import TextUpload from "routes/TextUpload";
 
 const AppRouter = ({ isLoggedIn, userObj }) => {
   return (
@@ -21,6 +23,14 @@ const AppRouter = ({ isLoggedIn, userObj }) => {
         <Route
           path="/profile"
           element={<Profile isLoggedIn={isLoggedIn} userObj={userObj} />}
+        ></Route>
+        <Route
+          path="/textUpload"
+          element={<TextUpload isLoggedIn={isLoggedIn} userObj={userObj} />}
+        ></Route>
+        <Route
+          path="/imageUpload"
+          element={<ImgUpload isLoggedIn={isLoggedIn} userObj={userObj} />}
         ></Route>
         <Route
           path="/signin"

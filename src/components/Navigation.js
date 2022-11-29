@@ -9,7 +9,7 @@ const Navigation = ({ isLoggedIn }) => {
   const navigate = useNavigate();
 
   const onSignOutClick = () => {
-    signOut(authService).then((user) => {
+    signOut(authService).then(() => {
       navigate("/");
     });
   };
@@ -25,6 +25,12 @@ const Navigation = ({ isLoggedIn }) => {
       </div>
       <div>
         <Link to="/profile">my profile</Link>
+      </div>
+      <div>
+        <Link to="/imageUpload">img upload</Link>
+      </div>
+      <div>
+        <Link to="/textUpload">text upload</Link>
       </div>
       {isLoggedIn ? (
         <button onClick={onSignOutClick}>sign out</button>

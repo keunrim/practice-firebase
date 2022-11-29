@@ -16,6 +16,7 @@ import Editor from "components/Editor";
 
 const Home = ({ isLoggedIn, userObj }) => {
   const [comment, setComment] = useState("");
+  const [postContent, setPostContent] = useState("");
   const [comments, setComments] = useState([]);
   const [attachment, setAttachment] = useState("");
   const attachInput = useRef(null);
@@ -52,6 +53,10 @@ const Home = ({ isLoggedIn, userObj }) => {
       setAttachment(result);
     };
     reader.readAsDataURL(theFile);
+  };
+
+  const onEditorChange = (value) => {
+    setPostContent(value);
   };
 
   const clearAttachment = () => {
@@ -95,25 +100,40 @@ const Home = ({ isLoggedIn, userObj }) => {
           <>
             <h4>새소식 발행</h4>
             <form onSubmit={onSubmit}>
-              <input
-                name="comment"
-                type="text"
-                value={comment}
-                placeholder="입력하세요"
-                maxLength={120}
-                onChange={onChange}
-              />
-              <input
-                name="attachImage"
-                type="file"
-                accept="image/*"
-                onChange={onFileChange}
-                ref={attachInput}
-              />
-              <button type="submit">
+              <div style={{ marginTop: "30px" }}>
+                <span>제목</span>
+                <input
+                  name="comment"
+                  type="text"
+                  value={comment}
+                  placeholder="입력하세요"
+                  maxLength={120}
+                  onChange={onChange}
+                />
+              </div>
+              <div style={{ marginTop: "30px" }}>
+                <span>대표이미지</span>
+                <input
+                  name="attachImage"
+                  type="file"
+                  accept="image/*"
+                  onChange={onFileChange}
+                  ref={attachInput}
+                />
+              </div>
+              <div style={{ marginTop: "30px" }}>
+                <Editor
+                  postContent={postContent}
+                  onEditorChange={onEditorChange}
+                />
+              </div>
+              <button
+                style={{ width: "100px", marginTop: "30px" }}
+                type="submit"
+              >
                 <MdCreate />
               </button>
-              <Editor />
+
               {attachment && (
                 <div>
                   <img

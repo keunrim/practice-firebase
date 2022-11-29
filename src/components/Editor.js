@@ -1,11 +1,11 @@
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 
-const Editor = () => {
+const Editor = ({ postContent, onEditorChange }) => {
   const modules = {
     toolbar: [
-      [{ header: [1, 2, false] }],
+      [{ header: [1, 2, 3, false] }],
       ["bold", "italic", "underline", "strike", "blockquote"],
       [
         { list: "ordered" },
@@ -36,7 +36,6 @@ const Editor = () => {
     "background",
   ];
 
-  const [value, setValue] = useState("");
   const quillRef = useRef(null);
 
   return (
@@ -46,8 +45,8 @@ const Editor = () => {
         theme="snow"
         modules={modules}
         formats={formats}
-        value={value}
-        onChange={setValue}
+        value={postContent}
+        onChange={onEditorChange}
         ref={quillRef}
       />
     </>
