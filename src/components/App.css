@@ -1,0 +1,148 @@
+@import url("https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap");
+@import url(https://cdn.jsdelivr.net/gh/moonspam/NanumSquare@1.0/nanumsquare.css);
+
+html {
+  font-size: 10px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: "Nanum Gothic", "NanumSquare", sans-serif;
+}
+
+body {
+  background-color: #f7f7f7;
+  color: #4f535c;
+}
+
+a {
+  color: #3e3e3e;
+  text-decoration: none;
+}
+
+.colorComment {
+  color: #858a96;
+}
+.colorHeader {
+  color: #3e3e3e;
+}
+.colorNormal {
+  color: #4f535c;
+}
+.colorLight {
+  color: #f7f7f7;
+}
+.colorLightGray {
+  color: #dadada;
+}
+.colorLightDim {
+  color: rgba(247, 247, 247, 0.7);
+}
+
+.NanumSquare {
+  font-family: "NanumSquare";
+}
+
+.light {
+  font-weight: 300;
+}
+.normal {
+  font-weight: 400;
+}
+.bold {
+  font-weight: 700;
+}
+.bolder {
+  font-weight: 800;
+}
+
+.textShadow {
+  text-shadow: 0.2rem 0.2rem 0.6rem rgba(0, 0, 0, 0.1);
+}
+
+.postContent {
+  font-size: 1.6rem;
+  line-height: 2.6rem;
+  margin-top: 2.4rem;
+}
+.postTitle {
+  font-size: 1.6rem;
+}
+
+.ql-editor {
+  tab-size: 2;
+  -moz-tab-size: 2;
+  -o-tab-size: 2;
+  font-size: 1.6rem;
+  line-height: 2.6rem;
+}
+
+.container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.contents {
+  width: 86vw;
+  max-width: 80rem;
+  position: relative;
+}
+
+.endSpace {
+  margin-top: 10rem;
+  height: 1rem;
+}
+
+.page {
+  position: absolute;
+  width: 100%;
+  left: 0;
+  top: 0;
+
+  display: flex;
+  justify-content: center;
+}
+
+.page-enter {
+  /* transform: translateY(0.5%); */
+  opacity: 0;
+}
+
+.page-enter-active {
+  /* transform: translateY(0%); */
+  opacity: 1;
+  transition: all 200ms ease-in-out;
+  -webkit-transition: all 200ms ease-in-out;
+}
+
+.page-exit {
+  /* transform: translateY(0%); */
+  opacity: 1;
+}
+
+.page-exit-active {
+  /* transform: translateY(-0.5%); */
+  opacity: 0;
+  transition: all 200ms ease-in-out;
+  -webkit-transition: all 200ms ease-in-out;
+}
+
+/* PC (해상도 1024px)*/
+@media all and (min-width: 1024px) {
+}
+
+/* 테블릿 가로, 테블릿 세로 (해상도 768px ~ 1023px)*/
+@media all and (min-width: 768px) and (max-width: 1023px) {
+}
+
+/* 모바일 가로, 모바일 세로 (해상도 480px ~ 767px)*/
+@media all and (max-width: 767px) {
+  .contents {
+    width: 90vw;
+    max-width: 80rem;
+    position: relative;
+  }
+}

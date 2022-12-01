@@ -48,51 +48,50 @@ const PostCard = ({ postObj, isLoggedIn, userObj }) => {
 
   return (
     <div>
-      <span>
-        {editing ? (
-          <>
-            <form onSubmit={onSubmit}>
-              <input
-                name="updateComment"
-                type="text"
-                value={updateComment}
-                maxLength={120}
-                required
-                onChange={onChange}
-              ></input>
-              <button type="submit">
-                <MdCreate />
-              </button>
-              <button type="button" onClick={onCancel}>
-                <MdCancel />
-              </button>
-            </form>
-          </>
-        ) : (
-          <>
-            {postObj.fileDownURL && (
-              <div>
-                <img
-                  src={postObj.fileDownURL}
-                  width="180px"
-                  height="135px"
-                  alt="글이미지"
-                />
-              </div>
-            )}
-            <div style={{ width: "400px" }}>
-              <div>
-                <h1>{postObj.title}</h1>
-              </div>
-              <div style={{ height: 200, marginTop: 10 }}>
-                <div dangerouslySetInnerHTML={{ __html: postObj.content }} />
-              </div>
+      {editing ? (
+        <>
+          <form onSubmit={onSubmit}>
+            <input
+              name="updateComment"
+              type="text"
+              value={updateComment}
+              maxLength={120}
+              required
+              onChange={onChange}
+            ></input>
+            <button type="submit">
+              <MdCreate />
+            </button>
+            <button type="button" onClick={onCancel}>
+              <MdCancel />
+            </button>
+          </form>
+        </>
+      ) : (
+        <>
+          {postObj.fileDownURL && (
+            <div>
+              <img
+                src={postObj.fileDownURL}
+                width="180px"
+                height="135px"
+                alt="글이미지"
+              />
             </div>
-
+          )}
+          <div style={{ width: "400px", border: "1px solid gray" }}>
+            <div className="postTitle NanumSquare">
+              <h1>{postObj.title}</h1>
+            </div>
+            <div
+              className="postContent"
+              style={{ maxHeight: 200, overflowY: "scroll", marginTop: 10 }}
+              dangerouslySetInnerHTML={{ __html: postObj.content }}
+            />
             {isLoggedIn && (
               <>
                 {postObj.creator === userObj.uid && (
-                  <div>
+                  <div style={{ marginTop: "10px" }}>
                     <button type="button" onClick={onEditing}>
                       <MdEditNote />
                     </button>
@@ -103,9 +102,9 @@ const PostCard = ({ postObj, isLoggedIn, userObj }) => {
                 )}
               </>
             )}
-          </>
-        )}
-      </span>
+          </div>
+        </>
+      )}
     </div>
   );
 };

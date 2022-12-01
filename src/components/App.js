@@ -3,6 +3,7 @@ import { authService } from "firebase-config";
 import { onAuthStateChanged } from "firebase/auth";
 
 import AppRouter from "components/AppRouter";
+import "components/App.css";
 
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);

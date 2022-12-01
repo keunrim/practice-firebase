@@ -1,6 +1,10 @@
 import React, { useRef } from "react";
-import ReactQuill from "react-quill";
+import ReactQuill, { Quill } from "react-quill";
 import "react-quill/dist/quill.snow.css";
+
+var Block = Quill.import("blots/block");
+Block.tagName = "DIV";
+Quill.register(Block, true);
 
 const Editor = ({ postContent, onEditorChange }) => {
   const modules = {

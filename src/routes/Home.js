@@ -57,13 +57,15 @@ const Home = ({ isLoggedIn, userObj }) => {
   };
 
   const uploadFileGetURL = async () => {
-    const storageRef = ref(
-      storageService,
-      `files/${userObj.uid}/${uuidv4()}_${postFile.name}`
-    );
-    const response = await uploadBytes(storageRef, postFile);
-    const uploadURL = await getDownloadURL(response.ref);
-    setFileDownURL(uploadURL);
+    if (postFile !== "") {
+      const storageRef = ref(
+        storageService,
+        `files/${userObj.uid}/${uuidv4()}_${postFile.name}`
+      );
+      const response = await uploadBytes(storageRef, postFile);
+      const uploadURL = await getDownloadURL(response.ref);
+      setFileDownURL(uploadURL);
+    }
   };
 
   const clearPost = () => {
