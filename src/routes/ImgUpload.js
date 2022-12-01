@@ -99,7 +99,7 @@ const ImgUpload = ({ userObj }) => {
 
   return (
     <div style={{ marginTop: "50px" }}>
-      <Line percent={progress} strokeWidth={2} strokeColor="#ff567a" />
+      <Line percent={progress} strokeWidth={1} strokeColor="#ff567a" />
       <form onSubmit={onSubmit}>
         <input
           multiple

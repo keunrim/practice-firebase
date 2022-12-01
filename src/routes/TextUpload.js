@@ -1,24 +1,35 @@
 import React, { useState } from "react";
-import { dbService, storageService } from "firebase-config";
+import { dbService } from "firebase-config";
 import { addDoc, collection } from "firebase/firestore";
-import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { Line } from "rc-progress";
 import Editor from "components/Editor";
 
 const TextUpload = ({ userObj }) => {
+  const [postTitle, setPostTitle] = useState("");
   const [postContent, setPostContent] = useState("");
+  const [postFile, setPostFile] = useState("");
+  const [fileDownURL, setFileDownURL] = useState("");
+
+  const onTitleChange = (event) => {
+    const {
+      target: { value },
+    } = event;
+    setPostTitle(value);
+  };
 
   const onEditorChange = (value) => {
     setPostContent(value);
+    console.log(value);
   };
 
   const postSubmit = async (event) => {
     event.preventDefault();
 
     const newDoc = {
+      title: postTitle,
       content: postContent,
       createdTime: Date.now(),
-      writer: userObj.uid,
+      creator: userObj.uid,
+      fileDownURL,
     };
 
     await addDoc(collection(dbService, "posts"), newDoc).catch((reason) => {
@@ -28,12 +39,29 @@ const TextUpload = ({ userObj }) => {
   };
 
   return (
-    <div>
+    <>
       <form onSubmit={postSubmit}>
-        <Editor postContent={postContent} onEditorChange={onEditorChange} />
+        <input
+          style={{
+            width: "650px",
+            height: "40px",
+            border: "1px solid #ccc",
+          }}
+          name="title"
+          type="text"
+          value={postTitle}
+          placeholder="제목"
+          maxLength={120}
+          onChange={onTitleChange}
+        />
+        <Editor
+          postContent={postContent}
+          onEditorChange={onEditorChange}
+          userObj={userObj}
+        />
         <button type="submit">전송하기</button>
       </form>
-    </div>
+    </>
   );
 };
 
