@@ -1,6 +1,8 @@
 import React, { useState } from "react";
-import { dbService } from "firebase-config";
+import { dbService, storageService } from "firebase-config";
 import { addDoc, collection } from "firebase/firestore";
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { Line } from "rc-progress";
 import Editor from "components/Editor";
 
 const TextUpload = ({ userObj }) => {
