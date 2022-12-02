@@ -129,7 +129,7 @@ const Editor = ({ postContent, onEditorChange }) => {
 
                     quill?.clipboard.dangerouslyPasteHTML(
                       range,
-                      `<img src=${downURL} alt="임베드 이미지" />`
+                      `<img src=${downURL} alt="임베드 이미지" width="100%" />`
                     );
                   }
                   console.log("File available at", downloadURL);

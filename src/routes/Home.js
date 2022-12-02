@@ -14,6 +14,8 @@ import { MdCreate, MdCancel } from "react-icons/md";
 import PostCard from "components/PostCard";
 import Editor from "components/Editor";
 
+import "react-quill/dist/quill.snow.css";
+
 const Home = ({ isLoggedIn, userObj }) => {
   const [postTitle, setPostTitle] = useState("");
   const [postContent, setPostContent] = useState("");

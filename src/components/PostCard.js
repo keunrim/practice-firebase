@@ -84,7 +84,7 @@ const PostCard = ({ postObj, isLoggedIn, userObj }) => {
               <h1>{postObj.title}</h1>
             </div>
             <div
-              className="postContent"
+              className="postContent ql-editor"
               style={{ maxHeight: 200, overflowY: "scroll", marginTop: 10 }}
               dangerouslySetInnerHTML={{ __html: postObj.content }}
             />
