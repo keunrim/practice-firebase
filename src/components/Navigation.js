@@ -5,6 +5,8 @@ import { authService } from "firebase-config";
 import { signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 
+import style from "./Navigation.module.css";
+
 const Navigation = ({ isLoggedIn }) => {
   const navigate = useNavigate();
 
@@ -15,29 +17,33 @@ const Navigation = ({ isLoggedIn }) => {
   };
 
   const onSignInClick = () => {
-    navigate("/signin");
+    navigate("/signIn");
   };
 
   return (
-    <>
+    <div className={`${style.NavigationBar}`}>
       <div>
-        <Link to="/">Home</Link>
+        <Link to="/postCreate">Post Create</Link>
       </div>
       <div>
-        <Link to="/profile">my profile</Link>
+        <Link to="/">Post Read</Link>
       </div>
       <div>
-        <Link to="/imageUpload">img upload</Link>
+        <Link to="/postUpdate">Post Update</Link>
       </div>
       <div>
-        <Link to="/textUpload">text upload</Link>
+        <Link to="/postDelete">Post Delete</Link>
       </div>
+      <div>
+        <Link to="/multiUpload">Multi upload</Link>
+      </div>
+
       {isLoggedIn ? (
         <button onClick={onSignOutClick}>sign out</button>
       ) : (
         <button onClick={onSignInClick}>Sign in</button>
       )}
-    </>
+    </div>
   );
 };
 

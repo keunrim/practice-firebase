@@ -22,6 +22,11 @@ a {
   text-decoration: none;
 }
 
+input {
+  background-color: #f7f7f7;
+  color: #4f535c;
+}
+
 .colorComment {
   color: #858a96;
 }

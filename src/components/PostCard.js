@@ -5,6 +5,7 @@ import { ref, deleteObject } from "firebase/storage";
 import { MdDelete, MdEditNote, MdCreate, MdCancel } from "react-icons/md";
 
 import "react-quill/dist/quill.snow.css";
+import style from "./PostCard.module.css";
 
 const PostCard = ({ postObj, isLoggedIn, userObj }) => {
   const [editing, setEditing] = useState(false);
@@ -49,7 +50,7 @@ const PostCard = ({ postObj, isLoggedIn, userObj }) => {
   };
 
   return (
-    <div>
+    <div style={{ marginTop: 20 }}>
       {editing ? (
         <>
           <form onSubmit={onSubmit}>
@@ -71,23 +72,17 @@ const PostCard = ({ postObj, isLoggedIn, userObj }) => {
         </>
       ) : (
         <>
-          {postObj.fileDownURL && (
-            <div>
-              <img
-                src={postObj.fileDownURL}
-                width="180px"
-                height="135px"
-                alt="글이미지"
-              />
-            </div>
-          )}
-          <div style={{ width: "400px", border: "1px solid gray" }}>
+          <div style={{ width: "760px" }}>
             <div className="postTitle NanumSquare">
               <h1>{postObj.title}</h1>
             </div>
             <div
-              className="postContent ql-editor"
-              style={{ maxHeight: 200, overflowY: "scroll", marginTop: 10 }}
+              className={`${style.postContent} ql-editor`}
+              style={{
+                maxWidth: 760,
+                overflowY: "scroll",
+                marginTop: 10,
+              }}
               dangerouslySetInnerHTML={{ __html: postObj.content }}
             />
             {isLoggedIn && (

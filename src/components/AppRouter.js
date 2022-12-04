@@ -1,36 +1,39 @@
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
-import Home from "routes/Home";
 import SignUpForm from "routes/SignUpForm";
 import SignInForm from "routes/SignInForm";
-import Logo from "components/logo";
 import Navigation from "components/Navigation";
-import Profile from "routes/Profile";
-import ImgUpload from "routes/ImgUpload";
-import TextUpload from "routes/TextUpload";
+import PostRead from "routes/PostRead";
+import PostCreate from "routes/PostCreate";
+import PostUpdate from "routes/PostUpdate";
+import MultiUpload from "routes/MultiUpload";
+import PostDelete from "routes/PostDelete";
 
 const AppRouter = ({ isLoggedIn, userObj }) => {
   return (
     <BrowserRouter>
-      <Logo />
       <Navigation isLoggedIn={isLoggedIn}></Navigation>
       <Routes>
         <Route
           path="/"
-          element={<Home isLoggedIn={isLoggedIn} userObj={userObj} />}
+          element={<PostRead isLoggedIn={isLoggedIn} userObj={userObj} />}
         ></Route>
         <Route
-          path="/profile"
-          element={<Profile isLoggedIn={isLoggedIn} userObj={userObj} />}
+          path="/postCreate"
+          element={<PostCreate isLoggedIn={isLoggedIn} userObj={userObj} />}
         ></Route>
         <Route
-          path="/textUpload"
-          element={<TextUpload isLoggedIn={isLoggedIn} userObj={userObj} />}
+          path="/postUpdate"
+          element={<PostUpdate isLoggedIn={isLoggedIn} userObj={userObj} />}
         ></Route>
         <Route
-          path="/imageUpload"
-          element={<ImgUpload isLoggedIn={isLoggedIn} userObj={userObj} />}
+          path="/postDelete"
+          element={<PostDelete isLoggedIn={isLoggedIn} userObj={userObj} />}
+        ></Route>
+        <Route
+          path="/multiUpload"
+          element={<MultiUpload isLoggedIn={isLoggedIn} userObj={userObj} />}
         ></Route>
         <Route
           path="/signin"

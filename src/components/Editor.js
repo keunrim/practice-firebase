@@ -1,17 +1,27 @@
 import React, { useEffect, useRef, useState } from "react";
+import { storageService } from "firebase-config";
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+
 import ReactQuill, { Quill } from "react-quill";
 import "react-quill/dist/quill.snow.css";
 
-import { storageService } from "firebase-config";
-import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { v4 as uuidv4 } from "uuid";
 import { Line } from "rc-progress";
 
+import "./Editor.css";
+
+//<p>태그를 <div>태그로 변경
 var Block = Quill.import("blots/block");
 Block.tagName = "DIV";
 Quill.register(Block, true);
 
-const Editor = ({ postContent, onEditorChange }) => {
+const Editor = ({
+  postContent,
+  onEditorChange,
+  postEmbeded,
+  onEmbededChange,
+  userObj,
+}) => {
   const modules = {
     toolbar: [
       [{ header: [1, 2, 3, false] }],
@@ -48,7 +58,6 @@ const Editor = ({ postContent, onEditorChange }) => {
   const quillRef = useRef(null);
 
   const [isUploading, setIsUploading] = useState(false);
-  const [embeddedURL, setEmbeddedURL] = useState([]);
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
@@ -63,7 +72,8 @@ const Editor = ({ postContent, onEditorChange }) => {
       input.onchange = async () => {
         setIsUploading(true);
         const promises = [];
-
+        // 여기서 isUploading 상태가 false이다.
+        // 나중에 다시 보자
         if (input.files && input.files.length > 0) {
           const file = input.files[0];
           const storageRef = ref(
@@ -117,7 +127,7 @@ const Editor = ({ postContent, onEditorChange }) => {
               await getDownloadURL(uploadTask.snapshot.ref).then(
                 (downloadURL) => {
                   imageInsert(downloadURL);
-                  setEmbeddedURL((prev) => [...prev, downloadURL]);
+                  onEmbededChange((prev) => [...prev, downloadURL]);
                   console.log("File available at", downloadURL);
                 }
               );
@@ -126,11 +136,12 @@ const Editor = ({ postContent, onEditorChange }) => {
         }
 
         await Promise.all(promises)
-          .then(() => {
+          .then((response) => {
             setIsUploading(false);
             setProgress(0);
+            console.log(`이미지 업로드 완료 : ${response}`);
           })
-          .catch((error) => console.log(error));
+          .catch((error) => console.log(`에러발생 : ${error}`));
       };
     };
 
@@ -149,7 +160,7 @@ const Editor = ({ postContent, onEditorChange }) => {
 
       quill?.clipboard.dangerouslyPasteHTML(
         range,
-        `<img src=${downloadURL} alt="임베드 이미지" width="100%" />`
+        `<img src=${downloadURL} />`
       );
     }
   };
@@ -157,7 +168,6 @@ const Editor = ({ postContent, onEditorChange }) => {
   return (
     <>
       <ReactQuill
-        style={{ width: "650px" }}
         theme="snow"
         modules={modules}
         formats={formats}
@@ -168,7 +178,7 @@ const Editor = ({ postContent, onEditorChange }) => {
       />
       <div>
         <Line
-          style={{ width: "650px" }}
+          style={{ width: "760px" }}
           percent={progress}
           strokeWidth={0.5}
           strokeColor="#ff567a"

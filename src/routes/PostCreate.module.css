@@ -1,0 +1,12 @@
+.postTitle {
+  width: 760px;
+  border: 1px solid #ccc;
+  margin-bottom: 20px;
+  font-size: 1.6rem;
+  padding: 12px 15px;
+}
+
+.submitButton {
+  font-size: 1.6rem;
+  padding: 12px 15px;
+}

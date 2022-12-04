@@ -1,0 +1,23 @@
+.NavigationBar {
+  width: auto;
+  display: flex;
+  flex-direction: row;
+  margin-top: 40px;
+  margin-bottom: 40px;
+}
+
+.NavigationBar div {
+  font-size: 1.5rem;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.NavigationBar div:first-child {
+  margin-left: 0px;
+}
+
+.NavigationBar button {
+  font-size: 1.2rem;
+  margin-left: 10px;
+  margin-right: 10px;
+}

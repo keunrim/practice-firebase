@@ -4,7 +4,7 @@ import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { v4 as uuidv4 } from "uuid";
 import { Line } from "rc-progress";
 
-const ImgUpload = ({ userObj }) => {
+const MultiUpload = ({ userObj }) => {
   const [files, setFiles] = useState([]);
   const [isUploading, setIsUploading] = useState(false);
   const [photoURL, setPhotoURL] = useState([]);
@@ -126,4 +126,4 @@ const ImgUpload = ({ userObj }) => {
   );
 };
 
-export default ImgUpload;
+export default MultiUpload;
