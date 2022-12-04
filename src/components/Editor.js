@@ -46,7 +46,7 @@ const Editor = ({ postContent, onEditorChange }) => {
   ];
 
   const quillRef = useRef(null);
-  // const [uploadFile, setUploadFile] = useState([]);
+
   const [isUploading, setIsUploading] = useState(false);
   const [embeddedURL, setEmbeddedURL] = useState([]);
   const [progress, setProgress] = useState(0);
@@ -63,17 +63,16 @@ const Editor = ({ postContent, onEditorChange }) => {
       input.onchange = async () => {
         setIsUploading(true);
         const promises = [];
-        let downURL = "";
-        if (input.files && input.files.length > 0 && !isUploading) {
-          console.log(input.files[0]);
-          const file = input.files[0];
 
+        if (input.files && input.files.length > 0) {
+          const file = input.files[0];
           const storageRef = ref(
             storageService,
             `images/${uuidv4()}_${file.name}`
           );
           const uploadTask = uploadBytesResumable(storageRef, file);
           promises.push(uploadTask);
+
           //업로드 상태 관리
           uploadTask.on(
             "state_changed",
@@ -117,21 +116,8 @@ const Editor = ({ postContent, onEditorChange }) => {
             async () => {
               await getDownloadURL(uploadTask.snapshot.ref).then(
                 (downloadURL) => {
-                  downURL = downloadURL;
+                  imageInsert(downloadURL);
                   setEmbeddedURL((prev) => [...prev, downloadURL]);
-                  const range = quillRef.current
-                    ?.getEditor()
-                    .getSelection()?.index;
-                  if (range !== null && range !== undefined) {
-                    let quill = quillRef.current?.getEditor();
-
-                    quill?.setSelection(range, 1);
-
-                    quill?.clipboard.dangerouslyPasteHTML(
-                      range,
-                      `<img src=${downURL} alt="임베드 이미지" width="100%" />`
-                    );
-                  }
                   console.log("File available at", downloadURL);
                 }
               );
@@ -140,9 +126,6 @@ const Editor = ({ postContent, onEditorChange }) => {
         }
 
         await Promise.all(promises)
-          .then(() => {
-            console.log("응?");
-          })
           .then(() => {
             setIsUploading(false);
             setProgress(0);
@@ -156,6 +139,20 @@ const Editor = ({ postContent, onEditorChange }) => {
       toolbar.addHandler("image", handleImage);
     }
   }, []);
+
+  const imageInsert = (downloadURL) => {
+    const range = quillRef.current?.getEditor().getSelection()?.index;
+    if (range !== null && range !== undefined) {
+      let quill = quillRef.current?.getEditor();
+
+      quill?.setSelection(range, 1);
+
+      quill?.clipboard.dangerouslyPasteHTML(
+        range,
+        `<img src=${downloadURL} alt="임베드 이미지" width="100%" />`
+      );
+    }
+  };
 
   return (
     <>

@@ -4,6 +4,8 @@ import { deleteDoc, doc, updateDoc } from "firebase/firestore";
 import { ref, deleteObject } from "firebase/storage";
 import { MdDelete, MdEditNote, MdCreate, MdCancel } from "react-icons/md";
 
+import "react-quill/dist/quill.snow.css";
+
 const PostCard = ({ postObj, isLoggedIn, userObj }) => {
   const [editing, setEditing] = useState(false);
   const [updateComment, setUpdateComment] = useState("");
