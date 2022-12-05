@@ -8,7 +8,7 @@ const Profile = ({ isLoggedIn, userObj }) => {
 
   const getMyComments = async () => {
     if (isLoggedIn) {
-      const collectionRef = collection(dbService, "comments");
+      const collectionRef = collection(dbService, "posts");
       const q = query(
         collectionRef,
         orderBy("createdTime", "desc"),

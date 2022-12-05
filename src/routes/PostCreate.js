@@ -50,6 +50,7 @@ const PostCreate = ({ userObj }) => {
         setPostLinkURL("");
         setPostContent("");
         setPostEmbeded([]);
+        alert("작성 완료되었습니다.");
       })
       .catch((reason) => {
         console.log(`등록 실패 : ${reason}`);
