@@ -12,19 +12,21 @@ import {
   limitToLast,
 } from "firebase/firestore";
 
+//antd
 import { Pagination } from "antd";
 
 const PostRead = () => {
   const collectionRef = collection(dbService, "posts");
+  const pageSize = 3;
 
   const [posts, setPosts] = useState([]);
   const [startPost, setStartPost] = useState(null);
   const [endPost, setEndPost] = useState(null);
 
-  const [pageSize, setPageSize] = useState(3);
+  // const [pageSize, setPageSize] = useState(3);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPosts, setTotalPosts] = useState(0);
-  const [totalPages, setTotalPages] = useState(0);
+  // const [totalPages, setTotalPages] = useState(0);
 
   useEffect(() => {
     const getPosts = async () => {
@@ -40,58 +42,24 @@ const PostRead = () => {
       setStartPost(startPostSnap);
       const endPostSnap = dataSnap.docs[dataSnap.docs.length - 1];
       setEndPost(endPostSnap);
+      console.log(endPostSnap);
     };
 
+    //전체 포스팅 수 집계
     const getTotalPosts = async () => {
       const query_ = query(collectionRef);
       const snapshot = await getCountFromServer(query_);
       setTotalPosts(snapshot.data().count);
-      const total = Math.ceil(totalPosts / pageSize);
-      setTotalPages(total);
     };
     getPosts();
     getTotalPosts();
   }, []);
 
-  const getNext = async () => {
-    const q = query(
-      collectionRef,
-      orderBy("createdTime", "desc"),
-      startAfter(endPost),
-      limit(pageSize)
-    );
-    const dataSnap = await getDocs(q);
-    const data = dataSnap.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-    setPosts(data);
-    const startPostSnap = dataSnap.docs[0];
-    setStartPost(startPostSnap);
-    const endPostSnap = dataSnap.docs[dataSnap.docs.length - 1];
-    setEndPost(endPostSnap);
-  };
-
-  const getPrev = async () => {
-    const q = query(
-      collectionRef,
-      orderBy("createdTime", "desc"),
-      endBefore(startPost),
-      limitToLast(pageSize)
-    );
-    const dataSnap = await getDocs(q);
-    const data = dataSnap.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-    setPosts(data);
-    const startPostSnap = dataSnap.docs[0];
-    setStartPost(startPostSnap);
-    const endPostSnap = dataSnap.docs[dataSnap.docs.length - 1];
-    setEndPost(endPostSnap);
-  };
-
   const handleChange = (page) => {
     if (page > currentPage) {
       console.log("next");
-      getNext();
     } else if (page < currentPage) {
       console.log("prev");
-      getPrev();
     }
     setCurrentPage(page);
   };
@@ -107,6 +75,7 @@ const PostRead = () => {
         ))}
       </div>
       <Pagination
+        size="small"
         current={currentPage}
         pageSize={pageSize}
         total={totalPosts}

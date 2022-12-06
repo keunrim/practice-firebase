@@ -18,8 +18,8 @@ Quill.register(Block, true);
 const Editor = ({
   postContent,
   onEditorChange,
-  postEmbeded,
-  onEmbededChange,
+  postEmbedImages,
+  onEmbedImagesChange,
   userObj,
 }) => {
   const modules = {
@@ -89,7 +89,7 @@ const Editor = ({
         const file = input.files[0];
         const storageRef = ref(
           storageService,
-          `posts/images/${uuidv4()}_${file.name}`
+          `posts/embedImages/${uuidv4()}_${file.name}`
         );
         const uploadTask = uploadBytesResumable(storageRef, file);
         promises.push(uploadTask);
@@ -138,7 +138,7 @@ const Editor = ({
             await getDownloadURL(uploadTask.snapshot.ref).then(
               (downloadURL) => {
                 imageInsert(downloadURL);
-                onEmbededChange((prev) => [...prev, downloadURL]);
+                onEmbedImagesChange((prev) => [...prev, downloadURL]);
                 console.log("파일 업로드 완료 : ", downloadURL);
               }
             );
