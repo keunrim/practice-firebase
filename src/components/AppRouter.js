@@ -9,6 +9,7 @@ import PostCreate from "routes/PostCreate";
 import PostUpdate from "routes/PostUpdate";
 import MultiUpload from "routes/MultiUpload";
 import PostDelete from "routes/PostDelete";
+import PostVeiw from "routes/postView";
 
 const AppRouter = ({ isLoggedIn, userObj }) => {
   return (
@@ -18,6 +19,10 @@ const AppRouter = ({ isLoggedIn, userObj }) => {
         <Route
           path="/"
           element={<PostRead isLoggedIn={isLoggedIn} userObj={userObj} />}
+        ></Route>
+        <Route
+          path="/post/:linkURL"
+          element={<PostVeiw isLoggedIn={isLoggedIn} userObj={userObj} />}
         ></Route>
         <Route
           path="/postCreate"

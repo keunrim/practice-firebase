@@ -6,18 +6,13 @@ import {
   query,
   orderBy,
   limit,
-  startAfter,
   getCountFromServer,
+  startAfter,
   endBefore,
   limitToLast,
-  Timestamp,
+  where,
 } from "firebase/firestore";
-
-//antd
-import { DatePicker } from "antd";
-import "dayjs/locale/ko";
-import locale from "antd/es/date-picker/locale/en_US";
-const { RangePicker } = DatePicker;
+import { Link } from "react-router-dom";
 
 const PostRead = () => {
   const collectionRef = collection(dbService, "posts");
@@ -27,16 +22,16 @@ const PostRead = () => {
   const [startPost, setStartPost] = useState(null);
   const [endPost, setEndPost] = useState(null);
 
-  // const [pageSize, setPageSize] = useState(3);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPosts, setTotalPosts] = useState(0);
-  // const [totalPages, setTotalPages] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
 
   useEffect(() => {
     const getPosts = async () => {
       const q = query(
         collectionRef,
         orderBy("createdTime", "desc"),
+        where("published", "==", true),
         limit(pageSize)
       );
       const dataSnap = await getDocs(q);
@@ -52,31 +47,78 @@ const PostRead = () => {
     const getTotalPosts = async () => {
       const query_ = query(collectionRef);
       const snapshot = await getCountFromServer(query_);
-      setTotalPosts(snapshot.data().count);
+      const totalCount = snapshot.data().count;
+      const nPages = Math.ceil(totalCount / pageSize);
+      setTotalPosts(totalCount);
+      setTotalPages(nPages);
     };
+
     getPosts();
     getTotalPosts();
   }, []);
 
-  const handleChange = (page) => {
-    if (page > currentPage) {
-      console.log("next");
-    } else if (page < currentPage) {
-      console.log("prev");
+  const onPrevClick = async () => {
+    if (currentPage > 1) {
+      const q = query(
+        collectionRef,
+        orderBy("createdTime", "desc"),
+        endBefore(startPost),
+        where("published", "==", true),
+        limitToLast(pageSize)
+      );
+      const dataSnap = await getDocs(q);
+      const data = dataSnap.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+      setPosts(data);
+      const startPostSnap = dataSnap.docs[0];
+      setStartPost(startPostSnap);
+      const endPostSnap = dataSnap.docs[dataSnap.docs.length - 1];
+      setEndPost(endPostSnap);
+      setCurrentPage(currentPage - 1);
     }
-    setCurrentPage(page);
+  };
+
+  const onNextClick = async () => {
+    if (currentPage < totalPages) {
+      const q = query(
+        collectionRef,
+        orderBy("createdTime", "desc"),
+        startAfter(endPost),
+        where("published", "==", true),
+        limit(pageSize)
+      );
+      const dataSnap = await getDocs(q);
+      const data = dataSnap.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+      setPosts(data);
+      const startPostSnap = dataSnap.docs[0];
+      setStartPost(startPostSnap);
+      const endPostSnap = dataSnap.docs[dataSnap.docs.length - 1];
+      setEndPost(endPostSnap);
+      setCurrentPage(currentPage + 1);
+    }
   };
 
   return (
     <>
       <h1>PostRead</h1>
-      <RangePicker locale={locale} />
       <div>
         {posts.map((post) => (
-          <div key={post.id} style={{ marginTop: "20px" }}>
-            <h2>{post.title}</h2>
-          </div>
+          <Link key={post.id} to={`/post/${post.linkURL}`} state={post}>
+            <div style={{ marginTop: "20px" }}>
+              <h2>{post.title}</h2>
+            </div>
+          </Link>
         ))}
+      </div>
+      <div style={{ marginTop: 20 }}>
+        <button type="button" onClick={onPrevClick}>
+          {"<"}
+        </button>
+        <span style={{ margin: "0px 10px" }}>
+          {currentPage} / {totalPages}
+        </span>
+        <button type="button" onClick={onNextClick}>
+          {">"}
+        </button>
       </div>
     </>
   );
