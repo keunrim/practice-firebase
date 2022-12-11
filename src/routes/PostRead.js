@@ -45,7 +45,7 @@ const PostRead = () => {
 
     //전체 포스팅 수 집계
     const getTotalPosts = async () => {
-      const query_ = query(collectionRef);
+      const query_ = query(collectionRef, where("published", "==", true));
       const snapshot = await getCountFromServer(query_);
       const totalCount = snapshot.data().count;
       const nPages = Math.ceil(totalCount / pageSize);
